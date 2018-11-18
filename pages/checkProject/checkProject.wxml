@@ -1,0 +1,55 @@
+<image class='collectButton' style='vertical-align:middle' src="{{buttonSrc}}"  bindtap="collectButtonTap"/>
+
+
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-article">
+      <view class="weui-article__h1" style='padding-left:10rpx'>{{projectName}}</view>
+      <view class="weui-article__section">
+
+
+        <view class="weui-article__section weui-cells">
+          <view class="weui-article__h3 weui-cell">发起人：
+            <view bindtap="clickAvatar" data-user="leader">
+              <image class="userinfo-avatar avatar" src="{{leaderAvatarUrl}}" background-size="cover"/> {{leaderName}}
+            </view>
+          </view>
+          <view class='weui-article__h3 weui-cell' style="display:flex;flex-direction:row;flex-wrap:wrap;text-align:center;">
+            已有队员：
+            <block wx:for="{{workersInfos}}" wx:key="_id">
+              <view data-index="{{index}}" data-user="worker" bindtap='clickAvatar'>
+                <image class="userinfo-avatar avatar" src="{{item.avatarUrl}}" background-size="cover"/>{{item.name}}
+              </view>
+            </block>
+          </view>
+        </view>
+
+        <view class='weui-article__section weui-cells'>
+          <view class='weui-article__h3 weui-cell'>项目介绍</view>
+          <view class="weui-article__p weui-cell">
+            {{projectDescription}}
+          </view>
+        </view>
+
+        <view class="weui-article__section weui-cells">
+          <view class="weui-article__h3 weui-cell">队友要求</view>
+          <view class="weui-article__p weui-cell">
+            {{teamMemberDescription}}
+          </view>
+        </view>
+
+
+      </view>
+    </view>
+
+
+    <view style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <button type='primary' class="weui-btn" bindtap="requestAttend" disabled='{{isButtonDisabled}}'>
+      申请加入项目
+      </button>
+    </view>
+
+    <view style='height:50rpx'></view>
+
+  </view>
+</view>

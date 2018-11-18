@@ -1,5 +1,9 @@
 {
   "usingComponents": {
-    "comp": "../../components/index"
-  }
+    "comp": "../../components/index",
+    "menu": "../../components/floatingButton"
+  },
+  "navigationBarTitleText":"主页",
+  "component": true,
+  "enablePullDownRefresh": true
 }

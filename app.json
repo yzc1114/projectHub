@@ -1,11 +1,45 @@
 {
-  "pages":[
-    "pages/index/index"
+  "cloud": true,
+  "pages": [
+    "pages/index/index",
+    "pages/startPage",
+    "pages/personalInfo/personalInfo",
+    "pages/personalInfo/changePersonalInfo/changePersonalInfo",
+    "pages/editProject/editProject",
+    "pages/personalInfo/collectedProjects/collectedProjects",
+    "pages/personalInfo/publishedProjects/publishedProjects",
+    "pages/checkProject/checkProject",
+    "pages/personalInfo/participatedProjects/participatedProjects",
+    "pages/personalInfo/myRequests/myRequests",
+    "pages/checkPerson/checkPerson",
+    "pages/checkPerson/checkPersonProjects/checkPersonProjects",
+    "pages/personalInfo/sentRequests/sentRequests"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f7f7f7"
+  },
+  "tabBar": {
+    "color": "#dddddd",
+    "selectedColor": "#000000",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "pages/images/图标_主页_未选中.png",
+        "selectedIconPath": "pages/images/图标_主页_选中.png",
+        "text": "主页"
+      },
+      {
+        "pagePath": "pages/personalInfo/personalInfo",
+        "iconPath": "pages/images/图标_我的_未选中.png",
+        "selectedIconPath": "pages/images/图标_我的_选中.png",
+        "text": "个人中心"
+      }
+    ]
   }
 }

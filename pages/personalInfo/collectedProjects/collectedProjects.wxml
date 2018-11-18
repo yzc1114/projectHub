@@ -1,0 +1,28 @@
+<view class="page">
+  <view class="page__bd">
+
+    <block wx:for="{{collectedProjectInfos}}" wx:key="{{_id}}">
+      <view class="weui-panel weui-panel_access">
+        <view class="weui-panel__hd">{{item.formatTime}}</view>
+        <view class="weui-panel__bd">
+
+          <navigator url="../../checkProject/checkProject?projectId={{item._id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <view class='weui-media-box__thumb project-left' style='-webkit-box-align:center;-webkit-align-items:center;align-items:center'>
+                <text style='margin-top:10rpx;display:block;font-size:10px;text-align:center'>还差</text>
+                <text style='display:block;font-size:20px;text-align:center'>{{item.teamMemberNumber - item.workersOpenid.length}}<text style='display:inline-block;font-size:10px'>人</text></text>
+              </view>
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">{{item.projectName}}</view>
+              <view class="weui-media-box__desc">{{item.projectDescription}}</view>
+            </view>
+          </navigator>
+
+        </view>
+      </view>
+    </block>
+
+  </view>
+
+</view>

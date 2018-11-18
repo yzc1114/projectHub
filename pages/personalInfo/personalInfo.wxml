@@ -1,0 +1,104 @@
+<!--pages/personalInfo/personalInfo.wxml-->
+
+<view class="page" wx:if="{{showPage}}">
+  <view class="page__bd">
+
+    <view style='height:30rpx'></view>
+    
+    <block wx:if="{{!showGetUserInfoButton}}">
+      <view class="weui-cells weui-cells_after-title" bindtap="editPersonalInfo">
+        <!-- 显示个人信息 头像名字性别-->
+        <view class="user flex-wrp">
+          <view class="avatar flex-item">
+            <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+          </view>
+          <view class="user-info flex-item">
+            <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+            <text class="edit">查看或编辑个人主页</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="weui-cells weui-cells_after-title">
+        <!-- 显示个人信息 头像名字性别-->
+        <view class="user">
+          <view class='buttonPersonal'>
+            <button bindgetuserinfo='getUserInfo' open-type='getUserInfo' class="weui-btn" type="primary"> 授权个人信息 </button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="my">
+
+    <view class="weui-cells weui-cells_after-title" style='font-size:35rpx'>
+
+            <navigator class="weui-cell" style='height:100rpx' url='./publishedProjects/publishedProjects'>
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="../images/已发布.png" style="width: 55rpx; height: 55rpx; display: block"/>
+                    <view class="weui-badge" style="position: absolute;top: -.8em;right: -.8em;">!</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <view>已发布的项目</view>
+                </view>
+            </navigator>
+
+            <navigator class="weui-cell" style='height:100rpx' url='./participatedProjects/participatedProjects'>
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="../images/已发布.png" style="width: 55rpx; height: 55rpx; display: block"/>
+                    
+                </view>
+                <view class="weui-cell__bd">
+                    <view>我参加的项目</view>
+                </view>
+            </navigator>
+
+            <navigator class="weui-cell" style='height:100rpx' url='./collectedProjects/collectedProjects'>
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="../images/已收藏.png" style="width: 55rpx; height: 55rpx; display: block"/>
+                    
+                </view>
+                <view class="weui-cell__bd">
+                    <view>已收藏的项目</view>
+                </view>
+            </navigator>
+
+            <view class="weui-cell" style='height:100rpx'  bindtap="publishNewProjectButton">
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="../images/发布新的.png" style="width: 55rpx; height: 55rpx; display: block"/>
+                    
+                </view>
+                <view class="weui-cell__bd">
+                    <view>发布新的项目</view>
+                </view>
+            </view>
+
+            <navigator class="weui-cell" style='height:100rpx' url='./myRequests/myRequests'>
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="../images/已发布.png" style="width: 55rpx; height: 55rpx; display: block"/>
+                    
+                </view>
+                <view class="weui-cell__bd">
+                    <view>我收到的申请</view>
+                </view>
+            </navigator>
+
+            <navigator class="weui-cell" style='height:100rpx' url='./sentRequests/sentRequests'>
+                <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <image src="../images/已发布.png" style="width: 55rpx; height: 55rpx; display: block"/>
+                    
+                </view>
+                <view class="weui-cell__bd">
+                    <view>我发出的申请</view>
+                </view>
+            </navigator>
+
+
+        </view>
+
+
+  </view>
+
+</view>

@@ -1,0 +1,56 @@
+<view class="page">
+
+  <view class="page__bd">
+
+    <view style='height:20rpx'></view>
+    <view class="weui-cells weui-cells_after-title">
+      <!-- 显示个人信息 头像名字性别-->
+      <view class="user flex-wrp">
+        <view class="avatar flex-item">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+        </view>
+        <view class="user-info flex-item">
+          <text class="userinfo-nickname">{{userInfo.name}}</text>
+          <text class='edit'>{{userInfo.sex}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view style='height:30rpx'></view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">手机号</view>
+        <view class='weui-cell__bd'>{{userInfo.telNumber}}</view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">专业</view>
+        <view class='weui-cell__bd'>{{userInfo.major}}</view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">年级</view>
+        <view class='weui-cell__bd'>{{userInfo.grade}}</view>
+      </view>
+    </view>
+
+
+    <view class="weui-cells weui-cells_after-title">
+      <navigator url="./checkPersonProjects/checkPersonProjects?type=leader&openid={{userOpenid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">Ta发起的项目</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator url="./checkPersonProjects/checkPersonProjects?type=worker&openid={{userOpenid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">Ta参与的项目</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+
+  </view>
+
+</view>

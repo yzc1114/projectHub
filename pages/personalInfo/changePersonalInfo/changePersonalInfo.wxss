@@ -1,0 +1,9 @@
+/* pages/personalInfo/changePersonalInfo/changePersonalInfo.wxss */
+page{
+  height: 100%
+}
+
+.editButton{
+  position: fixed;
+  bottom: 30rpx;
+}

@@ -1,0 +1,17 @@
+/* pages/checkProject/checkProject.wxss */
+.avatar{
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 1000px;
+  vertical-align: middle;
+  padding:4rpx;
+}
+
+.collectButton{
+  z-index: 10001;
+  position: fixed;
+  width: 60rpx;
+  height: 60rpx;
+  top: 40rpx;
+  right: 30rpx;
+}
