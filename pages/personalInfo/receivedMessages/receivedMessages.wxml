@@ -1,0 +1,27 @@
+<view class='page'>
+  <view class='page__bd'>
+
+    <view class="weui-cells__title">我收到的留言</view>
+    <view class="weui-cells weui-cells_after-title"></view>
+    <block wx:for="{{receivedMessageInfos}}" wx:key="{{id}}">
+    <view class="weui-panel weui-panel_access" style='margin:0 0 0 0;'>
+      <view class="weui-panel__bd">
+        <navigator url="./messageDetail/messageDetail?openid={{item.fromWho}}&content={{item.messageContent}}&avatarUrl={{item.avatarUrl}}&name={{item.name}}" class="weui-media-box weui-media-box_appmsg"  style="padding-top:5rpx;padding-bottom:5rpx;" hover-class="weui-cell_active">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg flexAvatar" >
+            <image class="weui-media-box__thumb avatar"  src="{{item.avatarUrl}}" />
+          </view>
+          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+            <view class="weui-media-box__title" style='font-size:30rpx'>{{item.name}}</view>
+            <view class="weui-media-box__desc">{{item.messageContent}}</view>
+          </view>
+          <view class="weui-media-box__info">
+            <view class="weui-media-box__info__meta">{{item.formatTimeMonthAndDay}}</view>
+          </view>
+        </navigator>
+      </view>
+    </view>
+    </block>
+
+
+  </view>
+</view>

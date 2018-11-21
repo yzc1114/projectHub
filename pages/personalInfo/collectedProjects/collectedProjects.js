@@ -16,7 +16,7 @@ Page({
     }).field({
       collectedProjects: true
     }).get({
-      success: (res) => {
+      complete: (res) => {
         console.log("查询到参与的项目", res.data);
         console.assert(res.data.length === 1 ? "正常" : "不正常");
         var collectedProjectIds = res.data[0].collectedProjects;
@@ -26,7 +26,11 @@ Page({
         collectedProjectIds.forEach(id => {
           const db = wx.cloud.database();
           db.collection("Projects").doc(id).get({
-            success: res => {
+            complete: res => {
+              if(!res){
+                //防止project已经被删除了
+                return;
+              }
               res.data.formatTime = util.formatTime(new Date(res.data.createTimeStamp));
               console.log(res);
               that.setData({
@@ -62,7 +66,11 @@ Page({
         collectedProjectIds.forEach(id => {
           const db = wx.cloud.database();
           db.collection("Projects").doc(id).get({
-            success: res => {
+            complete: res => {
+              if(!res){
+                //防止project已经被删除了
+                return;
+              }
               console.log(res);
               res.data.formatTime = util.formatTime(new Date(res.data.createTimeStamp));
               that.setData({

@@ -13,7 +13,9 @@
     "pages/personalInfo/myRequests/myRequests",
     "pages/checkPerson/checkPerson",
     "pages/checkPerson/checkPersonProjects/checkPersonProjects",
-    "pages/personalInfo/sentRequests/sentRequests"
+    "pages/personalInfo/sentRequests/sentRequests",
+    "pages/personalInfo/receivedMessages/receivedMessages",
+    "pages/personalInfo/receivedMessages/messageDetail/messageDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

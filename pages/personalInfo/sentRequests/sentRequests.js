@@ -7,7 +7,7 @@ Page({
     sentRequestProjectInfos: [],
     pageNumber: 1
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
     const db = wx.cloud.database();
     const _ = db.command;
     var that = this;
@@ -27,13 +27,22 @@ Page({
         var promises = [];
         const db = wx.cloud.database();
         sentRequestInfos.forEach(info => {
-          promises.push(db.collection("Projects").doc(info.requestProjectId).get());
+          promises.push(db.collection("Projects").doc(info.requestProjectId).get().then(res => {
+            //防止project已经删除
+            return res;
+
+          }).catch(reason => {
+            return null;
+          }));
         })
-        Promise.all(promises).then(results=>{
-          for (let i = sentRequestInfos.length-1;i>=0;i--){
+        Promise.all(promises).then(results => {
+          for (let i = sentRequestInfos.length - 1; i >= 0; i--) {
             var info = sentRequestInfos[i];
             var res = results[i];
-            res.data.formatTime = util.formatTime(new Date(res.data.createTimeStamp));
+            if (!res) {
+              continue;
+            }
+            res.data.formatTime = util.formatTime(new Date(info.requestTimeStamp));
             if (info.requestStatus === "requesting") {
               res.data.status = "申请中"
             } else if (info.requestStatus === "agreed") {
@@ -51,7 +60,7 @@ Page({
     })
 
   },
-  onReachBottom: function () {
+  onReachBottom: function() {
     const db = wx.cloud.database();
     const _ = db.command;
     var that = this;
@@ -74,13 +83,22 @@ Page({
         var promises = [];
         const db = wx.cloud.database();
         sentRequestInfos.forEach(info => {
-          promises.push(db.collection("Projects").doc(info.requestProjectId).get());
+          promises.push(db.collection("Projects").doc(info.requestProjectId).get().then(res => {
+            //防止project已经删除了
+            return res;
+          }).catch(reason=>{
+            //project已经被删了
+            return null;
+          }));
         })
         Promise.all(promises).then(results => {
           for (let i = sentRequestInfos.length - 1; i >= 0; i--) {
             var info = sentRequestInfos[i];
             var res = results[i];
-            res.data.formatTime = util.formatTime(new Date(res.data.createTimeStamp));
+            if (!res) {
+              continue;
+            }
+            res.data.formatTime = util.formatTime(new Date(info.requestTimeStamp));
             if (info.requestStatus === "requesting") {
               res.data.status = "申请中"
             } else if (info.requestStatus === "agreed") {

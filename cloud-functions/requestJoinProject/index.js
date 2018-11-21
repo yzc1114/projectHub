@@ -10,8 +10,9 @@ exports.main = async (event, context) => {
   const _ = db.command;
   console.log(event);
   var request = {
-    requestOpenid:event.requestOpenid,
+    requestOpenid:OPENID,
     requestProjectId:event.requestProjectId,
+    requestTimeStamp:event.requestTimeStamp,
   }
 
   
@@ -29,7 +30,8 @@ exports.main = async (event, context) => {
       data: {
         myRequestProjects: _.push({
           requestProjectId:event.requestProjectId,
-          requestStatus:"requesting"
+          requestStatus:"requesting",
+          requestTimeStamp:event.requestTimeStamp,
         }),
       }
     })

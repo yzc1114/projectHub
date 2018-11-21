@@ -8,6 +8,25 @@ Page({
     pageNumber: 1
   },
   onLoad: function (options) {
+    //先看看自己的hasNewParticipatingProjects是否为true 然后再决定是否更新自己的hasNewParticipatingProjects
+    var pages = getCurrentPages();
+    var prevPage = pages[pages.length - 2]; //拿到上一个界面 即为personalInfo.js
+    if (prevPage.data.hasNewParticipatingProjects) {
+      wx.cloud.callFunction({
+        name: "updateUserHasNew",
+        data: {
+          hasNewParticipatingProjects: false,
+        },
+        complete: res => {
+          //修改完毕
+          console.log("修改hasNewMessages完毕", res);
+          prevPage.setData({
+            hasNewParticipatingProjects:false,
+          })
+        }
+      })
+    }
+
     const db = wx.cloud.database();
     const _ = db.command;
     var that = this;

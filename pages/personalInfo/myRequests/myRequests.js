@@ -1,6 +1,6 @@
 // pages/personalInfo/myRequests/myRequests.js
 var app = getApp();
-
+var util = require("../../../utils.js");
 Page({
   data: {
     requests:[],
@@ -30,6 +30,8 @@ Page({
           }
           requestToBeAdded.requestOpenid = requests[i].requestOpenid;
           requestToBeAdded.requestProjectId = requests[i].requestProjectId;
+          requestToBeAdded.requestTimeStamp = requests[i].requestTimeStamp;
+          requestToBeAdded.requestFormatTime = util.formatTime(new Date(requestToBeAdded.requestTimeStamp));
           db.collection("UserInfos").where({
             openid: requests[i].requestOpenid,
           }).field({
@@ -63,20 +65,21 @@ Page({
     console.log(e);
     var requestId = e.currentTarget.dataset.requestId;
     var request = this.data.requests[requestId];
+    var that = this;
     wx.cloud.callFunction({
       name:"updateUserRequestStatus",
       data:{
         requestOpenid:request.requestOpenid,
         requestProjectId:request.requestProjectId,
+        requestTimeStamp:request.requestTimeStamp,
         status:"rejected",
       },
       complete:res=>{
         console.log("拒绝完事了",res);
-        /*
-        that.data.requests.splice(requestId,1);
+        that.data.requests.splice(requestId, 1);
         that.setData({
-          requests:that.data.requests,
-        });*/
+          requests: that.data.requests,
+        });
       }
     })
   },
@@ -91,6 +94,7 @@ Page({
       data: {
         requestOpenid: request.requestOpenid,
         requestProjectId: request.requestProjectId,
+        requestTimeStamp: request.requestTimeStamp,
         status: "agreed",
       },
       complete: res => {

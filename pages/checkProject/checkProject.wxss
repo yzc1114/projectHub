@@ -2,9 +2,10 @@
 .avatar{
   width: 60rpx;
   height: 60rpx;
+  border: 1px solid #000;
   border-radius: 1000px;
   vertical-align: middle;
-  padding:4rpx;
+  margin-right:10rpx; 
 }
 
 .collectButton{
@@ -14,4 +15,8 @@
   height: 60rpx;
   top: 40rpx;
   right: 30rpx;
+}
+
+.buttons{
+  display:flex;flex-direction:column;flex:1;justify-content:center;align-items:center;
 }

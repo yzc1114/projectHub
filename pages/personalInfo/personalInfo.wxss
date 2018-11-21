@@ -16,6 +16,7 @@ page{
   display: inline-block;
   width: 100rpx;
   height: 100rpx;
+  border:1px solid #000;
   border-radius: 80rpx;
 }
 .user .user-info{

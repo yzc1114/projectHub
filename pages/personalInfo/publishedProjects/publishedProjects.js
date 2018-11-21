@@ -32,6 +32,7 @@ Page({
       leaderOpenid: app.globalData.openid,
     }).skip(20 * that.data.pageNumber).get({
       success: (res) => {
+        console.log("跳过",20*that.data.pageNUmber);
         console.log("已发布的项目加载完毕", res);
         if (res.data.length === 0) { //若后面没有数据
           return;

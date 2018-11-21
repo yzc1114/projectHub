@@ -58,7 +58,13 @@ Page({
           participatingProjects: [],
           collectedProjects: [],
           telNumber: that.data.telNumberInput,
-          leadingProjects: []
+          leadingProjects: [],
+          requests: [],
+          myRequestProjects: [],
+          avatarUrl:"",
+          leftMessages:[],
+          hasNewParticipatingProjects:false,
+          hasNewMessages:false,
         },
         success: function(E) {
           //可以优化 之后再说啊 别忘了
@@ -136,7 +142,9 @@ Page({
       }
     })
   },
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    app.globalData.justShowStartPage = true;
+  },
   checkIfInfoLegal() {
     var userName = this.data.userNameInput;
     var telNumber = this.data.telNumberInput;

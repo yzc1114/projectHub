@@ -3,11 +3,12 @@
 <view class="page">
   <view class="page__bd" wx:if="{{userInfoChecked}}">
 
-    <view class="weui-search-bar">
+
+    <view id="searchBar" class="weui-search-bar">
       <view class="weui-search-bar__form">
         <view class="weui-search-bar__box">
           <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" bindfocus='' />
           <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
             <icon type="clear" size="14"></icon>
           </view>
@@ -20,87 +21,90 @@
       <view class="weui-search-bar__cancel-btn" bindtap="hideInput" hidden="{{!inputShowed}}">取消</view>
     </view>
 
-    <view class="weui-cells searchbar-result" hidden="{{inputVal.length <= 0}}">
-      <block wx:for="{{userInfos}}" wx:key="id">
-        <navigator wx:if="{{item.show}}" url="" class="weui-cell" hover-class="weui-cell_active">
-          <view class="weui-cell__bd">
-            <view>
-              <image src='../images/icon_nav_feedback.png' style="width:20rpx;    height:20rpx"></image>{{item.keyword}}</view>
-          </view>
-        </navigator>
-      </block>
-    </view>
-
-    <view class="weui-tab">
-      <view class="weui-navbar">
-        <block wx:for="{{tabs}}" wx:key="*this">
-          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-            <view class="weui-navbar__title">{{item}}</view>
-          </view>
-        </block>
-        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
-      </view>
-    </view>
-
-
-    <view class="weui-tab__panel">
-
-      <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-
-        <block wx:for="{{hotProjects}}" wx:key="{{_id}}">
-          <view class="weui-panel weui-panel_access">
-            <view class="weui-panel__hd">{{item.formatTime}}</view> 
-            <view class="weui-panel__bd">
-
-              <navigator url="../checkProject/checkProject?projectId={{item._id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-                <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                  <view class='weui-media-box__thumb project-left' style='-webkit-box-align:center;-webkit-align-items:center;align-items:center'>
-                    <text style='margin-top:10rpx;display:block;font-size:10px;text-align:center'>还差</text>
-                    <text style='display:block;font-size:20px;text-align:center'>{{item.teamMemberNumber - item.workersOpenid.length}}<text style='display:inline-block;font-size:10px'>人</text></text>
-                  </view>
-                </view>
-                <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                  <view class="weui-media-box__title">{{item.projectName}}</view>
-                  <view class="weui-media-box__desc">{{item.projectDescription}}</view>
-                </view>
-              </navigator>
-
+    <block wx:if="{{!showSeachResults}}">
+      <view id="navBar" class="weui-cells searchbar-result" hidden="{{inputVal.length <= 0}}">
+        <block wx:for="{{userInfos}}" wx:key="id">
+          <navigator wx:if="{{item.show}}" url="" class="weui-cell" hover-class="weui-cell_active">
+            <view class="weui-cell__bd">
+              <view>
+                <image src='../images/icon_nav_feedback.png' style="width:20rpx;    height:20rpx"></image>{{item.keyword}}</view>
             </view>
-          </view>
+          </navigator>
         </block>
-
       </view>
 
-      <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-
-        <block wx:for="{{latestProjects}}" wx:key="{{_id}}">
-          <view class="weui-panel weui-panel_access">
-            <view class="weui-panel__hd">{{item.formatTime}}</view>
-            <view class="weui-panel__bd">
-
-              <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-                <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                  <view class='weui-media-box__thumb project-left' style='-webkit-box-align:center;-webkit-align-items:center;align-items:center'>
-                    <text style='margin-top:10rpx;display:block;font-size:10px;text-align:center'>还差</text>
-                    <text style='display:block;font-size:20px;text-align:center'>{{item.teamMemberNumber - item.workersOpenid.length}}<text style='display:inline-block;font-size:10px'>人</text></text>
-                  </view>
-                </view>
-                <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                  <view class="weui-media-box__title">{{item.projectName}}</view>
-                  <view class="weui-media-box__desc">{{item.projectDescription}}</view>
-                </view>
-              </navigator>
-
+      <view class="weui-tab">
+        <view class="weui-navbar">
+          <block wx:for="{{tabs}}" wx:key="*this">
+            <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+              <view class="weui-navbar__title">{{item}}</view>
             </view>
-          </view>
-        </block>
-
+          </block>
+          <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+        </view>
       </view>
 
 
+      <view class="weui-tab__panel">
 
-    </view>
+        <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
 
+
+          <block wx:for="{{hotProjects}}" wx:key="{{_id}}">
+            <view class="weui-panel weui-panel_access">
+              <view class="weui-panel__hd">{{item.formatTime}}</view>
+              <view class="weui-panel__bd">
+
+                <navigator url="../checkProject/checkProject?projectId={{item._id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+                  <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                    <view class='weui-media-box__thumb project-left' style='-webkit-box-align:center;-webkit-align-items:center;align-items:center'>
+                      <text style='margin-top:10rpx;display:block;font-size:10px;text-align:center'>还差</text>
+                      <text style='display:block;font-size:20px;text-align:center'>{{item.teamMemberNumber - item.workersOpenid.length}}<text style='display:inline-block;font-size:10px'>人</text></text>
+                    </view>
+                  </view>
+                  <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                    <view class="weui-media-box__title">{{item.projectName}}</view>
+                    <view class="weui-media-box__desc">{{item.projectDescription}}</view>
+                  </view>
+                </navigator>
+
+              </view>
+            </view>
+          </block>
+
+
+        </view>
+
+        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+
+          <block wx:for="{{latestProjects}}" wx:key="{{_id}}">
+            <view class="weui-panel weui-panel_access">
+              <view class="weui-panel__hd">{{item.formatTime}}</view>
+              <view class="weui-panel__bd">
+
+                <navigator url="../checkProject/checkProject?projectId={{item._id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+                  <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                    <view class='weui-media-box__thumb project-left' style='-webkit-box-align:center;-webkit-align-items:center;align-items:center'>
+                      <text style='margin-top:10rpx;display:block;font-size:10px;text-align:center'>还差</text>
+                      <text style='display:block;font-size:20px;text-align:center'>{{item.teamMemberNumber - item.workersOpenid.length}}<text style='display:inline-block;font-size:10px'>人</text></text>
+                    </view>
+                  </view>
+                  <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                    <view class="weui-media-box__title">{{item.projectName}}</view>
+                    <view class="weui-media-box__desc">{{item.projectDescription}}</view>
+                  </view>
+                </navigator>
+
+              </view>
+            </view>
+          </block>
+
+        </view>
+
+
+
+      </view>
+    </block>
 
   </view>
 

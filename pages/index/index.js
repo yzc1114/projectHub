@@ -14,62 +14,12 @@ Page({
     userInfoChecked:false, //在打开主页之前是false 然后用云函数调用 根据openid查询用户信息
                           //检查之前不显示页面 检查完毕之后再显示页面内容
     hotProjects:[],
+    hotPageNumber:1,
     latestProjects:[],
+    latestPageNumber:1,
+    showSeachResults:false,
   },
   onLoad:function() {
-    wx.showLoading({
-      title: '加载中',
-      mask:true
-    })
-    //云端初始化
-    wx.cloud.init();
-    //登录微信
-    //获取openid
-    wx.login({
-      success: function (res) {
-        if (res.code) {
-          wx.cloud.callFunction({
-            name: "getOpenid",
-            complete: res => {
-              console.log('callFunction test result: ', res);
-              var OPENID = res.result.OPENID;
-              console.log(OPENID);
-              app.globalData.openid = OPENID;
-            }
-          })
-        }
-      },
-      fail: function (res) {
-        wx.hideLoading();
-        wx.showModal({
-          title: '登录微信失败',
-          content: '请检查你的网络连接',
-          showCancel: false
-        })
-      }
-    })//获取完毕
-
-    //根据openid查询用户信息 可能没有注册过 也可能注册过 
-    //TODO:若注册过 则修改几个按钮的行为
-    wx.cloud.callFunction({
-      name:"getUserInfoWithOpenId",
-      complete:res=>{
-        console.assert(res.result.data.length === 1 || res.result.data.length === 0,"返回数据正常","有多条数据有相同的openid???");
-        if(res.result.data.length === 1){
-          app.globalData.userInfoWithOpenId = res.result.data[0];
-          app.globalData.isRegistered = true;
-          console.log(res.result.data[0]);
-        }else{
-          app.globalData.isRegistered = false;
-          app.globalData.userInfoWithOpenId = null;
-          console.log("用户未注册");
-        }
-        this.setData({
-          userInfoChecked : true //用户信息已经检查过了 可以展示页面了
-        })
-        wx.hideLoading();
-      }
-    })
 
     //navBar初始化
     var that = this;
@@ -78,7 +28,6 @@ Page({
         that.setData({
           sliderLeft: 0,
           sliderOffset:0,
-          //sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
         });
       }
     });
@@ -101,6 +50,15 @@ Page({
         }
       }
     })
+
+    var timer = setInterval(()=>{
+      if(app.globalData.userInfoChecked){
+        that.setData({
+          userInfoChecked : true,
+        })
+        clearInterval(timer);
+      }
+    },50)
 
 
     //初始化最热的项目
@@ -151,7 +109,7 @@ Page({
     this.data.userInfos = []
     this.setData({
       inputVal: "",
-      "userInfos": this.data.userInfos
+      userInfos: this.data.userInfos
     });
   },
   inputTyping: function (e) {
@@ -161,10 +119,10 @@ Page({
     item.show = true
     this.data.userInfos.unshift(item)
     this.setData({
-      "curId": this.data.curId,
-      "inputVal": item.keyword,
-      "userInfos": this.data.userInfos
+      curId: this.data.curId,
+      inputVal: item.keyword,
     });
+    //TODO:根据item.keyword来搜索信息
   },
   searchKeyword: function (e) {
     console.log(this.data.inputVal)
@@ -206,7 +164,9 @@ Page({
     wx.showNavigationBarLoading();
     this.setData({
       hotProjects:[],
-      latestProjects:[]
+      hotPageNumber:1,
+      latestProjects:[],
+      latestPageNumber:1,
     })
     var that = this;
     const db = wx.cloud.database();
@@ -222,6 +182,37 @@ Page({
       that.setData({
         hotProjects:results[0].data,
         latestProjects:results[1].data,
+      });
+      wx.hideNavigationBarLoading();
+      wx.stopPullDownRefresh();
+    })
+  },
+  onShow:function(){
+    app.globalData.justShowStartPage = false;
+  },
+  onReachBottom:function(e){
+    var that = this;
+    const db = wx.cloud.database();
+    console.log("跳过",20 * that.data.hotPageNumber);
+    var promise1 = db.collection("Projects").orderBy("watchedTimes", "desc").skip(20 * that.data.hotPageNumber).get();
+    var promise2 = db.collection("Projects").orderBy("createTimeStamp", "desc").skip(20 * that.data.latestPageNumber).get();
+    Promise.all([promise1, promise2]).then((results) => {
+      console.log("两个都刷新完了", results)
+      if(results[0].data.length === 0){
+        //没有更多了
+        console.log("没有更多了");
+        return;
+      }
+      results.forEach((res) => {
+        res.data.forEach(function (item) {
+          item.formatTime = util.formatTime(new Date(item.createTimeStamp));
+        })
+      });
+      that.setData({
+        hotProjects: that.data.hotProjects.concat(results[0].data),
+        hotPageNumber:that.data.hotPageNumber + 1,
+        latestProjects: that.data.latestProjects.concat(results[1].data),
+        latestPageNumber:that.data.latestPageNumber + 1,
       });
       wx.hideNavigationBarLoading();
       wx.stopPullDownRefresh();

@@ -9,7 +9,7 @@
 
 
         <view class="weui-article__section weui-cells">
-          <view class="weui-article__h3 weui-cell">发起人：
+          <view class="weui-article__h3 weui-cell" style='margin-bottom:0;'>发起人：
             <view bindtap="clickAvatar" data-user="leader">
               <image class="userinfo-avatar avatar" src="{{leaderAvatarUrl}}" background-size="cover"/> {{leaderName}}
             </view>
@@ -18,7 +18,10 @@
             已有队员：
             <block wx:for="{{workersInfos}}" wx:key="_id">
               <view data-index="{{index}}" data-user="worker" bindtap='clickAvatar'>
-                <image class="userinfo-avatar avatar" src="{{item.avatarUrl}}" background-size="cover"/>{{item.name}}
+                <image class="userinfo-avatar avatar" src="{{item.avatarUrl}}" background-size="cover"/>
+                <view style='margin-right:10rpx'>
+                  {{item.name}}
+                </view>
               </view>
             </block>
           </view>
@@ -43,9 +46,24 @@
     </view>
 
 
-    <view style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <view style="display:flex;flex-direction:column;align-items:center;justify-content:center;" wx:if="{{showApply}}">
       <button type='primary' class="weui-btn" bindtap="requestAttend" disabled='{{isButtonDisabled}}'>
       申请加入项目
+      </button>
+    </view>
+
+    <view style='margin:30rpx' wx:if="{{showDelete}}">
+      <button type='primary'  class="weui-btn" bindtap="editProject">
+      修改项目
+      </button>
+      <button type='warn' class="weui-btn" bindtap="deleteProject">
+      删除项目
+      </button>
+    </view>
+
+    <view style="display:flex;flex-direction:column;align-items:center;justify-content:center;" wx:if="{{showExit}}">
+      <button type='warn' class="weui-btn" bindtap="exitProject">
+      退出项目
       </button>
     </view>
 
