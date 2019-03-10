@@ -4,23 +4,30 @@
     <view class="weui-cells__title">我收到的申请</view>
     <view class="weui-cells weui-cells_after-title">
 
-      <block wx:for="{{requests}}" wx:key="requestId">
+      <block wx:for="{{requests}}" wx:key="{{id}}">
         <view class="weui-cell">
-          <view class="weui-cell__hd">
-            <image src="{{item.requestUserAvatarUrl}}" class='avatar'></image>
-          </view>
+          <navigator url='../../checkPerson/checkPerson?openid={{item.requestOpenid}}'>
+            <view class="weui-cell__hd">
+              <image src="{{item.requestUserAvatarUrl}}" class='avatar'></image>
+            </view>
+          </navigator>
           <view class="weui-cell__bd" style='display:flex;flex-direction:column;justify-content:center;flex:1 1 auto'>
             <view>
-            {{item.requestUserName}}
+              {{item.requestUserName}}
             </view>
             <text style='font-size:25rpx'>
                     想加入：{{item.projectName}}
                   </text>
           </view>
           <view class="weui-cell__ft" style='display:flex;flex-direction:row;flex-wrap:nowrap;'>
-            <button class='weui-button' style='font-size:25rpx' bindtap="reject" data-request-id='{{item.requestId}}'>拒绝</button>
-            <view style='width:20rpx'></view>
-            <button class='weui-button' type='primary' style='font-size:25rpx' bindtap='agree' data-request-id='{{item.requestId}}'>同意</button>
+            <block wx:if="{{!item.agreedOrRejected}}">
+              <button class='weui-button' style='font-size:25rpx' bindtap="reject" data-request-id='{{item.id}}'>拒绝</button>
+              <view style='width:20rpx'></view>
+              <button class='weui-button' type='primary' style='font-size:25rpx' bindtap='agree' data-request-id='{{item.id}}'>同意</button>
+            </block>
+            <block wx:else>
+              {{item.textAfterTappingButton}}
+            </block>
           </view>
         </view>
       </block>

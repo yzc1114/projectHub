@@ -11,8 +11,8 @@
               <image class="userinfo-avatar avatar" src="{{avatarUrl}}" background-size="cover" /> {{name}}
             </view>
           </view>
-          <view class='weui-article__h3 weui-cell' style="display:flex;flex-direction:row;flex-wrap:wrap;text-align:center;">
-            {{content}}
+          <view class='weui-article__h3 weui-cell' style="display:flex;flex-direction:row;flex-wrap:wrap;">
+            <text selectable='true'>{{content}}</text>
           </view>
         </view>
 

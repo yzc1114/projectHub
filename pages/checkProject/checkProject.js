@@ -17,6 +17,8 @@ Page({
     createTimeStamp: 0,
     leaderAvatarUrl: "",
     leaderName: "",
+    projectProgress: "",
+    projectType: "",
     workersInfos: [],
     buttonSrc: "../images/未收藏.png",
     showApply: false,
@@ -24,6 +26,8 @@ Page({
     showExit: false,
     collectWorking: false,
     isButtonDisabled: true,
+    deadline: "",
+    passDeadline:false,
   },
 
   onLoad: function(options) {
@@ -38,7 +42,6 @@ Page({
       openid: app.globalData.openid,
     }).get({
       success: res => {
-        console.assert(res.length === 1 ? "正常" : "不正常");
         if (res.data[0].collectedProjects.indexOf(that.data.projectId) !== -1) {
           //收藏了
           that.setData({
@@ -94,7 +97,10 @@ Page({
           projectDescription: res.data.projectDescription,
           teamMemberDescription: res.data.teamMemberDescription,
           teamMemberNumber: res.data.teamMemberNumber,
-          createTimeStamp: res.data.createTimeStamp
+          createTimeStamp: res.data.createTimeStamp,
+          projectProgress: res.data.projectProgress,
+          projectType: res.data.projectType,
+          deadline: res.data.deadline
         });
         //看看自己是不是leader
         if (res.data.leaderOpenid === app.globalData.openid) {
@@ -111,7 +117,7 @@ Page({
           })
           //看看自己是不是队员
           var isWorker = false;
-          for (let i = 0; i < that.data.workersOpenids; i++) {
+          for (let i = 0; i < that.data.workersOpenids.length; i++) {
             if (that.data.workersOpenids[i] === app.globalData.openid) {
               //是队员
               isWorker = true;
@@ -119,10 +125,25 @@ Page({
                 showApply: false,
                 showDelete: false,
                 showExit: true,
-              })
+              });
+              break;
             }
           };
           if (!isWorker) {
+            //查看是否已经过了截止日期 如果过了就不让加入
+            var deadline = new Date(that.data.deadline);
+            var now = new Date(utils.formatTimeMonthAndDay(new Date(Date.now())));
+            console.log("截止日期",deadline);
+            if (deadline < now) {
+              //已过截止日期
+              console.log("截止日期已过");
+              that.setData({
+                passDeadline: true,                
+              })
+            }else{
+              console.log("还没有过截止日期");
+            }
+
             //不是队员
             that.setData({
               showApply: true,
@@ -151,39 +172,50 @@ Page({
           openid: that.data.leaderOpenid
         }).get({
           success: res => {
-            console.assert(res.length === 1 ? "正常" : "openid有重复");
+
             console.log("查找leader成功", res);
             console.log("res.data[0].avatarUrl:", res.data[0].avatarUrl);
             that.setData({
-              leaderName: res.data[0].name,
+              leaderName: res.data[0].nickName,
               leaderAvatarUrl: res.data[0].avatarUrl
             });
 
             //检查自己是否向发起人申请过该项目 然后改按钮
-            db.collection("UserInfos").where({
-              openid: that.data.leaderOpenid
-            }).field({
-              requests: true
-            }).get({
-              success: res => {
-                var requests = res.data[0].requests;
-                console.log("检查自己是否向发起人申请过该项目:", requests);
-                var ifButtonAvalible = true;
-                for (let i = 0; i < requests.length; i++) {
-                  if (!requests[i]) {
-                    continue;
+            //如果项目人满 则不能再申请
+            if (that.data.teamMemberNumber - that.data.workersOpenids.length > 0) {
+              //还有空位
+              db.collection("UserInfos").where({
+                openid: that.data.leaderOpenid
+              }).field({
+                requests: true
+              }).get({
+                success: res => {
+                  var requests = res.data[0].requests;
+                  console.log("检查自己是否向发起人申请过该项目:", requests);
+                  var ifButtonAvalible = true;
+                  for (let i = 0; i < requests.length; i++) {
+                    if (!requests[i]) {
+                      continue;
+                    }
+                    if (requests[i].requestProjectId === that.data.projectId &&
+                      requests[i].requestOpenid === app.globalData.openid &&
+                      requests[i].requestStatus === "requesting") {
+                      //只要不在申请中时才可以申请
+                      ifButtonAvalible = false;
+                      break;
+                    }
                   }
-                  if (requests[i].requestProjectId === that.data.projectId &&
-                    requests[i].requestOpenid === app.globalData.openid) {
-                    ifButtonAvalible = false;
-                    break;
-                  }
+                  that.setData({
+                    isButtonDisabled: !ifButtonAvalible,
+                  });
                 }
-                that.setData({
-                  isButtonDisabled: !ifButtonAvalible,
-                });
-              }
-            })
+              })
+            } else {
+              //没有空位置
+              that.setData({
+                isButtonDisabled: true
+              })
+            }
           },
           fail: res => {
             console.log("查找user出错", res);
@@ -197,14 +229,16 @@ Page({
             openid: workerOpenid
           }).field({
             name: true,
-            avatarUrl: true
+            avatarUrl: true,
           }).get());
         });
         Promise.all(promises).then(results => {
           console.log(results);
-          results.forEach(res => {
-            workersInfos.push(res.data[0]);
-          })
+          for (let i = 0; i < results.length; i++) {
+            results[i].data[0].openid = that.data.workersOpenids[i];
+            workersInfos.push(results[i].data[0])
+          }
+
           that.setData({
             workersInfos: workersInfos
           })
@@ -249,7 +283,6 @@ Page({
         }).get({
           success: res => {
             console.log("点击取消收藏", res);
-            console.assert(res.data.length === 1 ? "正常" : "不正常");
             var collectedProjects = res.data[0].collectedProjects;
             console.log("收到的项目", collectedProjects);
             collectedProjects
@@ -370,20 +403,42 @@ Page({
   exitProject: function(e) {
     var that = this;
     console.log("点击了退出项目");
+    wx.showNavigationBarLoading();
+    wx.showLoading({
+      title: '退出中...',
+      mask: true,
+    })
     wx.cloud.callFunction({
       name: "exitProject",
       data: {
-        projectId: that.data.projectId
+        projectId: that.data.projectId,
+        openid: app.globalData.openid,
       },
       complete: res => {
+        wx.hideNavigationBarLoading();
+        wx.hideLoading();
+        wx.showToast({
+          title: '退出成功',
+        })
         console.log("退出完事了", res);
         //需要将页面中的按钮以及参与者的信息修改掉
         var workersOpenids = that.data.workersOpenids;
-        workersOpenids.splice(workersOpenids.indexOf(app.globalData.openid));
+        while (workersOpenids.indexOf(app.globalData.openid) !== -1) {
+          workersOpenids.splice(workersOpenids.indexOf(app.globalData.openid));
+        };
+        var newWorkersInfos = [];
+        for (let i = 0; i < that.data.workersInfos.length; i++) {
+          if (that.data.workersInfos[i].openid !== app.globalData.openid) {
+            newWorkersInfos.push(that.data.workersInfos[i]);
+          }
+        }
         that.setData({
           workersOpenids: workersOpenids,
+          workersInfos: newWorkersInfos,
           showDelete: false,
           showApply: true,
+          showExit: false,
+          isButtonDisabled: false,
         });
       }
     })
@@ -395,4 +450,11 @@ Page({
       url: '../editProject/editProject?openType=edit&projectId=' + that.data.projectId,
     });
   },
+  manageWorker: function(e) {
+    var that = this;
+    console.log("点击了管理团队", e);
+    wx.navigateTo({
+      url: "./manageWorkers/manageWorkers"
+    })
+  }
 })

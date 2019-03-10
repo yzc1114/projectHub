@@ -13,7 +13,7 @@
 		"nodeModules": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.0.9",
+	"libVersion": "2.4.1",
 	"appid": "wx81a4cc6878f3e889",
 	"projectname": "MyProj",
 	"isGameTourist": false,

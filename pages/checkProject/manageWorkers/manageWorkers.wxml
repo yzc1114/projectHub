@@ -1,0 +1,32 @@
+<view class="page">
+  <view class="page__bd">
+
+    <view class="weui-cells__title">我的队员</view>
+    <view class="weui-cells weui-cells_after-title">
+
+      <block wx:for="{{workersInfos}}" wx:key="{{id}}">
+        <view class="weui-cell">
+          <navigator url='../../checkPerson/checkPerson?openid={{item.openid}}'>
+            <view class="weui-cell__hd">
+              <image src="{{item.avatarUrl}}" class='avatar'></image>
+            </view>
+          </navigator>
+          <view class="weui-cell__bd" style='display:flex;flex-direction:column;justify-content:center;flex:1 1 auto'>
+            <view>
+              {{item.name}}
+            </view>
+          </view>
+          <view class="weui-cell__ft" style='display:flex;flex-direction:row;flex-wrap:nowrap;'>
+            <block>
+              <button class='weui-button' type='warn' style='font-size:25rpx' bindtap='deleteWorker' data-id='{{item.id}}'>移除</button>
+            </block>
+          </view>
+        </view>
+      </block>
+
+
+    </view>
+
+
+  </view>
+</view>

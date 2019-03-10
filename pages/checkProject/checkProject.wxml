@@ -14,40 +14,46 @@
               <image class="userinfo-avatar avatar" src="{{leaderAvatarUrl}}" background-size="cover"/> {{leaderName}}
             </view>
           </view>
-          <view class='weui-article__h3 weui-cell' style="display:flex;flex-direction:row;flex-wrap:wrap;text-align:center;">
+          <view class='weui-article__h3 weui-cell' style="display:flex;flex-direction:row;flex-wrap:wrap;text-align:center;margin-bottom:0;">
             已有队员：
             <block wx:for="{{workersInfos}}" wx:key="_id">
-              <view data-index="{{index}}" data-user="worker" bindtap='clickAvatar'>
+              <view data-index="{{index}}" data-user="worker" bindtap='clickAvatar'
+              style='padding="50rpx"'>
                 <image class="userinfo-avatar avatar" src="{{item.avatarUrl}}" background-size="cover"/>
-                <view style='margin-right:10rpx'>
-                  {{item.name}}
-                </view>
               </view>
             </block>
+          </view>
+          <view class='weui-article__h3 weui-cell' style='margin-bottom:0;'>
+            项目进度：{{projectProgress}}
+          </view>
+          <view class='weui-article__h3 weui-cell' style='margin-bottom:0;'>
+            项目类别：{{projectType}}
+          </view>
+          <view class='weui-article__h3 weui-cell' style='margin-bottom:0;'>
+            截止日期：{{deadline}}
           </view>
         </view>
 
         <view class='weui-article__section weui-cells'>
           <view class='weui-article__h3 weui-cell'>项目介绍</view>
           <view class="weui-article__p weui-cell">
-            {{projectDescription}}
+          <text selectable='true'>{{projectDescription}}</text>
           </view>
         </view>
 
         <view class="weui-article__section weui-cells">
           <view class="weui-article__h3 weui-cell">队友要求</view>
           <view class="weui-article__p weui-cell">
-            {{teamMemberDescription}}
+            <text>{{teamMemberDescription}}</text>
           </view>
         </view>
-
 
       </view>
     </view>
 
 
     <view style="display:flex;flex-direction:column;align-items:center;justify-content:center;" wx:if="{{showApply}}">
-      <button type='primary' class="weui-btn" bindtap="requestAttend" disabled='{{isButtonDisabled}}'>
+      <button type='primary' class="weui-btn" bindtap="requestAttend" disabled='{{isButtonDisabled || passDeadline}}'>
       申请加入项目
       </button>
     </view>
@@ -55,6 +61,9 @@
     <view style='margin:30rpx' wx:if="{{showDelete}}">
       <button type='primary'  class="weui-btn" bindtap="editProject">
       修改项目
+      </button>
+      <button type='normal'  class="weui-btn" bindtap="manageWorker">
+      管理队员
       </button>
       <button type='warn' class="weui-btn" bindtap="deleteProject">
       删除项目

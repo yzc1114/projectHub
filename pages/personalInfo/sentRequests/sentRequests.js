@@ -18,7 +18,6 @@ Page({
     }).get({
       success: (res) => {
         console.log("查询到参与的项目", res.data);
-        console.assert(res.data.length === 1 ? "正常" : "不正常");
         var sentRequestInfos = res.data[0].myRequestProjects;
         that.setData({
           sentRequestInfos: sentRequestInfos
@@ -71,7 +70,6 @@ Page({
     }).get({
       success: (res) => {
         console.log("查询到参与的项目", res.data);
-        console.assert(res.data.length === 1 ? "正常" : "不正常");
         if (res.data[0].length === 0) {
           //没有多余的了
           return;

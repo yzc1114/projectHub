@@ -42,7 +42,6 @@ Page({
       }).get({
         success: (res) => {
           console.log("查询到参与的项目", res.data);
-          console.assert(res.data.length === 1 ? "正常" : "不正常");
           var participatingProjectIds = res.data[0].participatingProjects;
           that.setData({
             participatingProjectIds: participatingProjectIds
@@ -94,7 +93,7 @@ Page({
       }).get({
         success: (res) => {
           console.log("查询到参与的项目", res.data);
-          console.assert(res.data.length === 1 ? "正常" : "不正常");
+          console.log(res.data.length === 1 ? "正常" : "不正常");
           if (res.data[0].length === 0) {
             //没有多余的了
             return;

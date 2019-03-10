@@ -20,3 +20,7 @@
 .buttons{
   display:flex;flex-direction:column;flex:1;justify-content:center;align-items:center;
 }
+
+.selectable-text-container{
+  display: flex;
+}

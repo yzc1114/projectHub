@@ -1,7 +1,7 @@
 <view class="page">
 
   <view class="page__bd">
-  <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{tipMessage}}</view>
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{tipMessage}}</view>
 
     <view style='height:20rpx'></view>
     <view class="weui-cells weui-cells_after-title">
@@ -11,7 +11,7 @@
           <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
         </view>
         <view class="user-info flex-item">
-          <text class="userinfo-nickname">{{userInfo.name}}</text>
+          <text class="userinfo-nickname">{{userInfo.nickName}}</text>
           <text class='edit'>{{userInfo.sex}}</text>
         </view>
       </view>
@@ -19,29 +19,43 @@
 
     <view style='height:30rpx'></view>
 
+    
+    <!--
     <view class="weui-cells weui-cells_after-title">
+      
       <view class="weui-cell">
         <view class="weui-cell__bd">手机号</view>
         <view class='weui-cell__bd'>{{userInfo.telNumber}}</view>
       </view>
-    </view>
 
-    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">学号</view>
+        <view class='weui-cell__bd'>{{userInfo.studentId}}</view>
+      </view>
+
       <view class="weui-cell">
         <view class="weui-cell__bd">专业</view>
         <view class='weui-cell__bd'>{{userInfo.major}}</view>
       </view>
-    </view>
 
-    <view class="weui-cells weui-cells_after-title">
+
+
       <view class="weui-cell">
         <view class="weui-cell__bd">年级</view>
         <view class='weui-cell__bd'>{{userInfo.grade}}</view>
       </view>
-    </view>
+
+      <view class="weui-cell">
+        <view class="weui-cell__hd">擅长 </view>
+        <view class='weui-cell__bd' style='margin-left:10px'>
+          <block wx:for="{{userInfo.goodAt}}">
+            {{item}}
+          </block>
+        </view>
+      </view>
+      
 
 
-    <view class="weui-cells weui-cells_after-title">
       <navigator url="./checkPersonProjects/checkPersonProjects?type=leader&openid={{userOpenid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
         <view class="weui-cell__bd">Ta发起的项目</view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
@@ -50,25 +64,27 @@
         <view class="weui-cell__bd">Ta参与的项目</view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
+      
     </view>
+    -->
 
     <block wx:if="{{!isMyself}}">
-    <view class="weui-cells__title">给TA留言</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell">
-        <view class="weui-cell__bd">
-          <textarea class="weui-textarea" placeholder="请输入你对TA想说的话" style="height: 4em" bindinput='onMessageInput'/>
-          <view class="weui-textarea-counter">{{messageInputLength}}/140</view>
+      <view class="weui-cells__title">给TA留言</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="请输入你对TA想说的话" style="height: 8em" bindinput='onMessageInput' />
+            <view class="weui-textarea-counter">{{messageInputLength}}/140</view>
+          </view>
         </view>
       </view>
-    </view>
-    
 
-    <view style='height:40rpx;'></view>
-    <view class='sendButton'>
-      <button bindtap="sendMessage" class="weui-btn" type="primary">发送留言</button>
-    </view>
-    <view style='height:60rpx;'></view>
+
+      <view style='height:40rpx;'></view>
+      <view class='sendButton'>
+        <button bindtap="sendMessage" class="weui-btn" type="primary">发送留言</button>
+      </view>
+      <view style='height:60rpx;'></view>
     </block>
 
   </view>

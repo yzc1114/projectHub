@@ -13,6 +13,7 @@ exports.main = async (event, context) => {
     requestOpenid:OPENID,
     requestProjectId:event.requestProjectId,
     requestTimeStamp:event.requestTimeStamp,
+    requestStatus:"requesting",
   }
 
   
@@ -21,7 +22,8 @@ exports.main = async (event, context) => {
     openid:event.leaderOpenid,
   }).update({
     data: {
-      requests: _.push(request)
+      requests: _.push(request),
+      hasNewRequest:true,
     }
   }).then(res=>{
     return db.collection('UserInfos').where({

@@ -10,12 +10,13 @@ Page({
     const _ = db.command;
     var that = this;
     //先看看自己的hasNewMessages是否为true 然后再决定是否更新自己的hasNewMessages
+    /*
     var pages = getCurrentPages();
     var prevPage = pages[pages.length - 2]; //拿到上一个界面
     if(prevPage.data.hasNewMessages){
       wx.cloud.callFunction({
         name:"updateUserHasNew",
-        data:{
+        data:{ 
           hasNewMessages:false,
         },
         complete:res=>{
@@ -24,6 +25,19 @@ Page({
           prevPage.setData({
             hasNewMessages:false
           })
+        }
+      })
+    }*/
+    if(app.globalData.hasNewMessages){
+      wx.cloud.callFunction({
+        name: "updateUserHasNew",
+        data: {
+          hasNewMessages: false,
+        },
+        complete: res => {
+          //修改完毕
+          console.log("修改hasNewMessages完毕", res);
+          app.globalData.hasNewMessages = false;
         }
       })
     }
@@ -69,6 +83,7 @@ Page({
     const db = wx.cloud.database();
     const _ = db.command;
     var that = this;
+    wx.showNavigationBarLoading();
     db.collection("UserInfos").where({
       openid: app.globalData.openid
     }).field({
@@ -77,6 +92,7 @@ Page({
       console.log("我收到的留言", res.data[0].leftMessages);
       if(res.data[0].leftMessages.length <= 0){
         //没有更多数据了
+        wx.hideNavigationBarLoading();
         console.log("没有更多数据了");
         return;
       }else{
@@ -114,6 +130,7 @@ Page({
         that.setData({
           receivedMessageInfos: that.data.receivedMessageInfos,
         })
+        wx.hideNavigationBarLoading();
       })
     });
   },

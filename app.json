@@ -15,7 +15,10 @@
     "pages/checkPerson/checkPersonProjects/checkPersonProjects",
     "pages/personalInfo/sentRequests/sentRequests",
     "pages/personalInfo/receivedMessages/receivedMessages",
-    "pages/personalInfo/receivedMessages/messageDetail/messageDetail"
+    "pages/personalInfo/receivedMessages/messageDetail/messageDetail",
+    "pages/checkProject/manageWorkers/manageWorkers",
+    "pages/personalInfo/projects/projects",
+    "pages/personalInfo/requests/requests"
   ],
   "window": {
     "backgroundTextStyle": "light",

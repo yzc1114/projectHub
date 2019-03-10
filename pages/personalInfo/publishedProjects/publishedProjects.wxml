@@ -17,11 +17,12 @@
             </view>
             <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
               <view class="weui-media-box__title">{{item.projectName}}</view>
+              <view class="weui-media-box__desc" style='color:#555'>{{item.projectProgress}} {{item.projectType}}</view>
               <view class="weui-media-box__desc">{{item.projectDescription}}</view>
             </view>
 
             <view class="weui-cell__ft" style="font-size: 0">
-                    <view class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></view>
+                    <!--<view class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></view>-->
             </view>
 
           </navigator>

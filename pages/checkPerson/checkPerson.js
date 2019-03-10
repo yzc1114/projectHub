@@ -8,7 +8,7 @@ Page({
     messageInput: "",
     showTopTips: false,
     tipMessage: "留言不能为空",
-    isMyself:true
+    isMyself:true,
   },
   onLoad: function(options) {
     this.setData({
@@ -18,7 +18,7 @@ Page({
     if(that.data.userOpenid === app.globalData.openid){
       //是自己
       that.setData({
-        isMyself:true,
+        isMyself:false,
       })
     }else{
       that.setData({
@@ -32,6 +32,17 @@ Page({
     var that = this;
     db.collection("UserInfos").where({
       openid: options.openid,
+    }).field({
+      nickName:true,
+      sex:true,
+      telNumber:true,
+      major:true,
+      grade:true,
+      leadingProjects:true,
+      participatingProjects:true,
+      goodAt:true,
+      avatarUrl:true,
+      studentId:true,
     }).get().then(res => {
       console.log(res);
       that.setData({
@@ -47,12 +58,18 @@ Page({
     })
   },
   sendMessage: function(e) {
+    wx.showLoading({
+      title: '发送中',
+      mask: true,
+    })
     if (!app.globalData.isRegistered) {
       //如果没有注册的话 就没法留言
+      wx.hideLoading();
       wx.showModal({
         title: '注意',
         content: '请您先注册，再给Ta留言',
         success:res=>{
+          
           if(res.confirm){
             wx.navigateTo({
               url: '../startPage',
@@ -66,6 +83,7 @@ Page({
     } else {
       var that = this;
       if (this.data.messageInput === "") {
+        wx.hideLoading();
         this.setData({
           showTopTips: true,
         });
@@ -77,10 +95,6 @@ Page({
         return;
       } else {
         //留言不为空 发送给这个人
-        wx.showLoading({
-          title: '发送中',
-          mask: true
-        })
         wx.cloud.callFunction({
           name: "updateUserLeftMessages",
           data: {

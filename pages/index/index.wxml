@@ -1,5 +1,6 @@
 <!--_addEvent  和 _deleteLotsEvent分别是弹出菜单里面按钮对应的事件，需要在调用的js中实现-->
-<menu hidden id='menu' bind:addEvent="_firstFloatingButtonEvent" bind:deleteLotsEvent="secondFloatingButtonEvent" bind:mainEvent="_mainFloatingButtonEvent" />
+
+<image bindtap='_mainFloatingButtonEvent' src="../images/plus.png" class='buttom' animation="{{animationMain}}"></image>
 <view class="page">
   <view class="page__bd" wx:if="{{userInfoChecked}}">
 
@@ -8,7 +9,7 @@
       <view class="weui-search-bar__form">
         <view class="weui-search-bar__box">
           <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" bindfocus='' />
+          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" bindfocus='onFocus' bindblur='onBlur' />
           <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
             <icon type="clear" size="14"></icon>
           </view>
@@ -21,17 +22,68 @@
       <view class="weui-search-bar__cancel-btn" bindtap="hideInput" hidden="{{!inputShowed}}">取消</view>
     </view>
 
-    <block wx:if="{{!showSeachResults}}">
-      <view id="navBar" class="weui-cells searchbar-result" hidden="{{inputVal.length <= 0}}">
-        <block wx:for="{{userInfos}}" wx:key="id">
-          <navigator wx:if="{{item.show}}" url="" class="weui-cell" hover-class="weui-cell_active">
-            <view class="weui-cell__bd">
-              <view>
-                <image src='../images/icon_nav_feedback.png' style="width:20rpx;    height:20rpx"></image>{{item.keyword}}</view>
+    <block wx:if="{{showSearchResults}}">
+      <view class="weui-cells searchbar-result" hidden="{{inputVal.length <= 0}}">
+        <block wx:for="{{searchResults}}" wx:key="id">
+
+
+          <view class="weui-panel__bd weui-cell" wx:if="{{item.isProject}}" bindtap='clickSearchResult' data-url='../checkProject/checkProject?projectId={{item._id}}'>
+
+            <view class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" style='padding:0px'>
+              <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                <view class='weui-media-box__thumb project-left' style='-webkit-box-align:center;-webkit-align-items:center;align-items:center'>
+                  <text style='margin-top:10rpx;display:block;font-size:10px;text-align:center'>还差</text>
+                  <text style='display:block;font-size:20px;text-align:center'>{{item.teamMemberNumber - item.workersOpenid.length}}<text style='display:inline-block;font-size:10px'>人</text></text>
+                </view>
+              </view>
+              <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                <view class="weui-media-box__title">{{item.projectName}}</view>
+                <view class="weui-media-box__desc" style='color:#555'>{{item.projectProgress}} {{item.projectType}}</view>
+                <view class="weui-media-box__desc">{{item.projectDescription}}</view>
+              </view>
             </view>
-          </navigator>
+
+          </view>
+
+          <view class="weui-cell" wx:if="{{item.isUser}}" bindtap="clickSearchResult" data-url='../checkPerson/checkPerson?openid={{item.openid}}'>
+            <view class="weui-cell__hd">
+              <image src="{{item.avatarUrl}}" class='avatar'></image>
+            </view>
+            <view class="weui-cell__bd" style='display:flex;flex-direction:column;justify-content:center;flex:1 1 auto'>
+              <view>
+                {{item.nickName}}
+              </view>
+            </view>
+          </view>
+
+
         </block>
       </view>
+
+
+
+
+    </block>
+
+    <block wx:if="{{inputShowed && inputVal === ''}}">
+      <view class="weui-cells__title">项目类别</view>
+      <view class="searchButtons">
+      <block wx:for="{{projectTypeItems}}">
+          <button class="weui-btn mini-btn myBtn" style="margin-top:15px;" type="{{item.checked ? 'primary' : 'default'}}" size="mini" data-project-type="{{item.name}}" bindtap='checkButton'>{{item.name}}</button>
+        </block>
+      </view>
+ 
+      <view class="weui-cells__title">成员要求</view>
+      <view class="searchButtons">
+        <block wx:for="{{goodAtItems}}">
+          <button class="weui-btn mini-btn myBtn" style="margin-top:15px;" type="default" size="mini"
+        type="{{item.checked ? 'primary' : 'default'}}" size="mini" data-good-at="{{item.name}}" bindtap='checkButton'>{{item.name}}</button>
+        </block>
+      </view>
+
+    </block>
+
+    <block wx:if="{{!showSearchResults}}">
 
       <view class="weui-tab">
         <view class="weui-navbar">
@@ -64,7 +116,9 @@
                   </view>
                   <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                     <view class="weui-media-box__title">{{item.projectName}}</view>
-                    <view class="weui-media-box__desc">{{item.projectDescription}}</view>
+                    <view class="weui-media-box__desc" style='color:#555'>{{item.projectProgress}} {{item.projectType}}</view>
+                    
+                    <view class="weui-media-box__desc" style='margin-top:5px'>{{item.projectDescription}}</view>
                   </view>
                 </navigator>
 
@@ -91,7 +145,8 @@
                   </view>
                   <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                     <view class="weui-media-box__title">{{item.projectName}}</view>
-                    <view class="weui-media-box__desc">{{item.projectDescription}}</view>
+                    <view class="weui-media-box__desc" style='color:#555'>{{item.projectProgress}} {{item.projectType}}</view>
+                    <view class="weui-media-box__desc" style='margin-top:5px'>{{item.projectDescription}}</view>
                   </view>
                 </navigator>
 

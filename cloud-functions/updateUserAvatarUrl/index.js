@@ -13,7 +13,8 @@ exports.main = async (event, context) => {
     openid: _.eq(OPENID)
   }).update({
     data: {
-      avatarUrl: event.avatarUrl
+      avatarUrl: event.avatarUrl,
+      nickName: event.nickName,
     }
   });
 }

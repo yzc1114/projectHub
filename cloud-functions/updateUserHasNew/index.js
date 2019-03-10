@@ -9,19 +9,31 @@ exports.main = async (event, context) => {
   const db = cloud.database();
   const _ = db.command;
   console.log(event);
-  if(event.hasNewMessages){
+  if(event.hasNewMessages === false){
     //如果是查看了消息列表
     return db.collection("UserInfos").where({
       _openid:OPENID,
     }).update({
-      hasNewMessages:event.hasNewMessages,
+      data:{
+        hasNewMessages: event.hasNewMessages,
+      }
     });
-  }else if(event.hasNewParticipatingProjects){
+  }else if(event.hasNewParticipatingProjects === false){
     //如果是查看了参加的项目列表
     return db.collection("UserInfos").where({
       _openid:OPENID
     }).update({
-      hasNewParticipatingProjects:event.hasNewParticipatingProjects,
+      data:{
+        hasNewParticipatingProjects: event.hasNewParticipatingProjects,
+      }
+    })
+  }else if(event.hasNewRequest === false){
+    return db.collection("UserInfos").where({
+      _openid: OPENID
+    }).update({
+      data: {
+        hasNewRequest: event.hasNewRequest,
+      }
     })
   }
 }

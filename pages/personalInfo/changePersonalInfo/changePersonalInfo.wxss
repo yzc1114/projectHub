@@ -7,3 +7,12 @@ page{
   position: fixed;
   bottom: 30rpx;
 }
+
+/* pages/startPage.wxss */
+.checkBoxGroup{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  
+}

@@ -1,0 +1,56 @@
+<view class="page">
+  <view class="page__bd">
+
+    <view style='height:30rpx'></view>
+
+  </view>
+
+  <view class="my">
+
+    <view class="weui-cells weui-cells_after-title" style='font-size:35rpx'>
+
+      <navigator class="weui-cell" style='height:100rpx' url='../publishedProjects/publishedProjects'>
+        <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+          <image src="../../images/publishedProjects.png" style="width: 55rpx; height: 55rpx; display: block" />
+        </view>
+        <view class="weui-cell__bd">
+          <view>已发布的项目</view>
+        </view>
+      </navigator>
+
+      <navigator class="weui-cell" style='height:100rpx' url='../participatedProjects/participatedProjects'>
+        <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+          <image src="../../images/participatingProjects.png" style="width: 55rpx; height: 55rpx; display: block" />
+          <view wx:if="{{hasNewParticipatingProjects}}" class="weui-badge" style="position: absolute;top: -.8em;right: -.8em;">!</view>
+        </view>
+        <view class="weui-cell__bd">
+          <view>我参加的项目</view>
+        </view>
+      </navigator>
+
+      <navigator class="weui-cell" style='height:100rpx' url='../collectedProjects/collectedProjects'>
+        <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+          <image src="../../images/collectedProjects.png" style="width: 55rpx; height: 55rpx; display: block" />
+
+        </view>
+        <view class="weui-cell__bd">
+          <view>已收藏的项目</view>
+        </view>
+      </navigator>
+
+      <view class="weui-cell" style='height:100rpx' bindtap="publishNewProjectButton">
+        <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+          <image src="../../images/publishNewProject.png" style="width: 55rpx; height: 55rpx; display: block" />
+
+        </view>
+        <view class="weui-cell__bd">
+          <view>发布新的项目</view>
+        </view>
+      </view>
+
+    </view>
+
+
+  </view>
+
+</view>

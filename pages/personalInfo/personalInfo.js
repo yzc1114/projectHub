@@ -11,28 +11,19 @@ Page({
     showGetUserInfoButton: false,
     hasNewParticipatingProjects:false,
     hasNewMessages:false,
+    hasNewRequest:false,
   },
   onLoad: function(options) {
     //搜索个人信息中的hasNewParticipatingProjects和hasNewMessages
     var that = this;
-    const db = wx.cloud.database();
-    db.collection("UserInfos").where({
-      openid:app.globalData.openid,
-    }).field({
-      hasNewParticipatingProjects:true,
-      hasNewMessages:true,
-    }).get({
-      success:res=>{
-        console.log("查询有无hasNewParticipatingProjects和hasNewMessages完毕",res.data[0]);
-        that.setData({
-          hasNewParticipatingProjects:res.data[0].hasNewParticipatingProjects,
-          hasNewMessages:res.data[0].hasNewMessages,
-        });
-      },
-      fail:res=>{
-        console.log("查询失败");
-      }
-    })
+    setInterval(()=>{
+      that.setData({
+        hasNewParticipatingProjects: app.globalData.hasNewParticipatingProjects,
+        hasNewMessages: app.globalData.hasNewMessages,
+        hasNewRequest: app.globalData.hasNewRequest
+      });
+      console.log("设置完毕")
+    }, 2500); //每隔2.5秒重设一次数据
   },
   editPersonalInfo: function(e) {
     wx.navigateTo({
@@ -75,6 +66,11 @@ Page({
     }
     else{
       var that = this;
+      that.setData({
+        hasNewParticipatingProjects: app.globalData.hasNewParticipatingProjects,
+        hasNewMessages: app.globalData.hasNewMessages,
+        hasNewRequest: app.globalData.hasNewRequest,
+      });
       //检测这个openid是否已经注册过 如果没有注册 则导航到注册界面
       if (app.globalData.isRegistered) {
         this.setData({
@@ -106,6 +102,19 @@ Page({
                   // 可以将 res 发送给后台解码出 unionId
                   app.globalData.userInfo = res.userInfo
                   console.log("myAvatarUrl:", res.userInfo.avatarUrl);
+                  //更新云端的头像url 以防换头像了
+                  //也同时更新昵称
+                  wx.cloud.callFunction({
+                    name: "updateOneUserMessage",
+                    data:{
+                      avatarUrl: res.userInfo.avatarUrl,
+                      nickName: res.userInfo.nickName,
+                      onlyUpdateAvatarUrl: true,
+                    },
+                    complete:function(e){
+                      console.log("头像和昵称更新完了");
+                    }
+                  })
                   that.setData({
                     userInfo: res.userInfo,
                     hasUserInfo: true,

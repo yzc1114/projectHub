@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="page__bd">
+
+    <view style='height:30rpx'></view>
+  </view>
+
+  <view class="my">
+
+    <view class="weui-cells weui-cells_after-title" style='font-size:35rpx'>
+
+      <navigator class="weui-cell" style='height:100rpx' url='../myRequests/myRequests'>
+        <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+          <image src="../../images/requestsIGot.png" style="width: 55rpx; height: 55rpx; display: block" />
+          <view wx:if="{{hasNewRequest}}" class="weui-badge" style="position: absolute;top: -.8em;right: -.8em;">!</view>
+        </view>
+        <view class="weui-cell__bd">
+          <view>我收到的申请</view>
+        </view>
+      </navigator>
+
+      <navigator class="weui-cell" style='height:100rpx' url='../sentRequests/sentRequests'>
+        <view class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+          <image src="../../images/requestsISent.png" style="width: 55rpx; height: 55rpx; display: block" />
+
+        </view>
+        <view class="weui-cell__bd">
+          <view>我发出的申请</view>
+        </view>
+      </navigator>
+
+      
+
+    </view>
+
+
+  </view>
+
+</view>

@@ -15,10 +15,21 @@ Page({
     teamMemberDescriptionInputLength: 0,
     showTopTips: false,
     tipMessage: "",
+    deadline:{},
+    projectType:["理科","工科","社科","艺术"],
+    projectTypeIndex :0,
+    projectProgress : ["未立项","已立项","中期答辩","已结题"],
+    projectProgressIndex : 0,
+    date: "2019-01-01",
+    start:"",
   },
 
   onLoad: function(options) {
     var that = this;
+    var start = utils.formatTimeMonthAndDay(new Date(Date.now()));
+    that.setData({
+      start:start,
+    })
     if(options.openType === "edit"){
       this.setData({
         openType:options.openType,
@@ -29,6 +40,8 @@ Page({
       const db = wx.cloud.database();
       const _ = db.command;
       db.collection("Projects").doc(that.data.projectId).get().then(res=>{
+        var projectTypeIndex = that.data.projectType.indexOf(res.data.projectType);
+        var projectProgressIndex = that.data.projectProgress.indexOf(res.data.projectProgress);
         that.setData({
           projectNameInput:res.data.projectName,
           teamMemberNumberInput:res.data.teamMemberNumber,
@@ -36,6 +49,8 @@ Page({
           projectDescriptionInputLength:res.data.projectDescription.length,
           teamMemberDescriptionInput:res.data.teamMemberDescription,
           teamMemberDescriptionInputLength:res.data.teamMemberDescription.length,
+          projectTypeIndex: projectTypeIndex,
+          projectProgressIndex: projectProgressIndex,
         });
         console.log("加载数据完毕");
       })
@@ -114,6 +129,9 @@ Page({
           projectName: that.data.projectNameInput,
           teamMemberDescription: that.data.teamMemberDescriptionInput,
           teamMemberNumber: that.data.teamMemberNumberInput,
+          projectProgress: that.data.projectProgress[that.data.projectProgressIndex],
+          projectType: that.data.projectType[that.data.projectTypeIndex],
+          deadline:that.data.date,
         },
         complete:res=>{
           console.log("更新完毕");
@@ -127,6 +145,9 @@ Page({
             projectName: that.data.projectNameInput,
             teamMemberDescription: that.data.teamMemberDescriptionInput,
             teamMemberNumber: that.data.teamMemberNumberInput,
+            projectProgress: that.data.projectProgress[that.data.projectProgressIndex],
+            projectType: that.data.projectType[that.data.projectTypeIndex],
+            deadline : that.data.date
           })
           wx.navigateBack()
         }
@@ -146,7 +167,10 @@ Page({
           teamMemberDescription: that.data.teamMemberDescriptionInput,
           teamMemberNumber: that.data.teamMemberNumberInput,
           createTimeStamp: Date.now(),
-          watchedTimes: 0
+          watchedTimes: 0,
+          projectProgress: that.data.projectProgress[that.data.projectProgressIndex],
+          projectType:that.data.projectType[that.data.projectTypeIndex],
+          deadline:that.data.date,
         },
         success: function (res) {
           wx.hideLoading();
@@ -196,5 +220,23 @@ Page({
       teamMemberDescriptionInput: res.detail.value,
       teamMemberDescriptionInputLength: res.detail.value.length
     })
-  }
+  },
+
+  bindProjectProgressChange:function(e){
+    this.setData({
+      projectProgressIndex: e.detail.value
+    })
+  },
+
+  bindProjectTypeChange:function(e){
+    this.setData({
+      projectTypeIndex:e.detail.value
+    })
+  },
+
+  bindDateChange: function (e) {
+    this.setData({
+      date: e.detail.value
+    })
+  },
 })

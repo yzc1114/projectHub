@@ -14,8 +14,6 @@ Component({
   data: {
     isShow: false,//是否已经弹出
     animMain: {},//旋转动画
-    animAdd: {},//item位移,透明度
-    animDelLots: {},//item位移,透明度
   },
 
   /**
@@ -39,14 +37,6 @@ Component({
         })
       }
     },
-    add: function () {
-      this.triggerEvent("addEvent")
-      this.showOrHide()
-    },
-    deleteLots: function () {
-      this.triggerEvent("deleteLotsEvent")
-      this.showOrHide()
-    },
 
     //弹出动画
     popp: function () {
@@ -55,21 +45,11 @@ Component({
         duration: 500,
         timingFunction: 'ease-out'
       })
-      var animationDelLots = wx.createAnimation({
-        duration: 500,
-        timingFunction: 'ease-out'
-      })
-      var animationAdd = wx.createAnimation({
-        duration: 500,
-        timingFunction: 'ease-out'
-      })
+      
       animationMain.rotateZ(90).step();
-      animationDelLots.translate(0, -100 / 750 * systemInfo.windowWidth).rotateZ(90).opacity(1).step();
-      animationAdd.translate(0, -200 / 750 * systemInfo.windowWidth).rotateZ(90).opacity(1).step();
+      
       this.setData({
         animMain: animationMain.export(),
-        animDelLots: animationDelLots.export(),
-        animAdd: animationAdd.export(),
       })
     },
     //收回动画
@@ -79,21 +59,9 @@ Component({
         duration: 500,
         timingFunction: 'ease-out'
       })
-      var animationDelLots = wx.createAnimation({
-        duration: 500,
-        timingFunction: 'ease-out'
-      })
-      var animationAdd = wx.createAnimation({
-        duration: 500,
-        timingFunction: 'ease-out'
-      })
       animationMain.rotateZ(0).step();
-      animationDelLots.translate(0, 0).rotateZ(0).opacity(0).step();
-      animationAdd.translate(0, 0).rotateZ(0).opacity(0).step();
       this.setData({
         animMain: animationMain.export(),
-        animDelLots: animationDelLots.export(),
-        animAdd: animationAdd.export(),
       })
     }
   },

@@ -13,6 +13,9 @@ exports.main = async (event, context) => {
       teamMemberNumber:event.teamMemberNumber,
       projectDescription:event.projectDescription,
       teamMemberDescription:event.teamMemberDescription,
+      projectProgress: event.projectProgress,
+      projectType: event.projectType,
+      deadline:event.deadline,
     }
   });
 }

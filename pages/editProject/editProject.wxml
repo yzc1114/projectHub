@@ -9,7 +9,7 @@
           <view class="weui-label">项目名称</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入项目参加的比赛" type="text" bindinput='onProjectNameInputTyping' maxlength='20' value='{{projectNameInput}}'/>
+          <input class="weui-input" placeholder="请输入项目参加的比赛" type="text" bindinput='onProjectNameInputTyping' maxlength='20' value='{{projectNameInput}}' />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
@@ -17,7 +17,37 @@
           <view class="weui-label">队友数量</view>
         </view>
         <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="你想要的队友数量" type="number" bindinput='onteamMemberNumberInputTyping' maxlength='3' value='{{teamMemberNumberInput}}'/>
+          <input class="weui-input" placeholder="你想要的队友数量" type="number" bindinput='onteamMemberNumberInputTyping' maxlength='3' value='{{teamMemberNumberInput}}' />
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_select">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
+          <view class="weui-label">项目进度</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker bindchange="bindProjectProgressChange" value="{{projectProgressIndex}}" range="{{projectProgress}}">
+            <view class="weui-select weui-select_in-select-after">{{projectProgress[projectProgressIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_select">
+        <view class="weui-cell__hd weui-cell__hd_in-select-after">
+          <view class="weui-label">项目类型</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker bindchange="bindProjectTypeChange" value="{{projectTypeIndex}}" range="{{projectType}}">
+            <view class="weui-select weui-select_in-select-after">{{projectType[projectTypeIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">截止日期</view>
+        </view>
+        <view class="weui-cell__bd">
+          <picker mode="date" value="{{date}}" start="{{start}}" end="2021-09-01" bindchange="bindDateChange">
+            <view class="weui-input">{{date}}</view>
+          </picker>
         </view>
       </view>
     </view>
@@ -26,7 +56,7 @@
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
         <view class="weui-cell__bd">
-          <textarea class="weui-textarea" placeholder="请输入文本" style="height: 5.5em" bindinput='onProjectDescriptionInputTyping' value='{{projectDescriptionInput}}'/>
+          <textarea class="weui-textarea" placeholder="请输入文本" style="height: 5.5em" bindinput='onProjectDescriptionInputTyping' value='{{projectDescriptionInput}}' />
           <view class="weui-textarea-counter">{{projectDescriptionInputLength}}/140</view>
         </view>
       </view>

@@ -18,14 +18,22 @@ Page({
     }).get({
       complete: (res) => {
         console.log("查询到参与的项目", res.data);
-        console.assert(res.data.length === 1 ? "正常" : "不正常");
+        
         var collectedProjectIds = res.data[0].collectedProjects;
         that.setData({
           collectedProjectIds: collectedProjectIds
         });
         collectedProjectIds.forEach(id => {
           const db = wx.cloud.database();
-          db.collection("Projects").doc(id).get({
+          db.collection("Projects").doc(id).field({
+            createTimeStamp:true,
+            teamMemberNumber:true,
+            projectName:true,
+            projectDescription:true,
+            workersOpenid:true,
+            projectProgress: true,
+            projectType: true,
+          }).get({
             complete: res => {
               if(!res){
                 //防止project已经被删除了
@@ -46,6 +54,8 @@ Page({
   onReachBottom:function(){
     const db = wx.cloud.database();
     const _ = db.command;
+    wx.showNavigationBarLoading();
+
     var that = this;
     db.collection("UserInfos").where({
       openid: app.globalData.openid
@@ -54,9 +64,10 @@ Page({
     }).get({
       success: (res) => {
         console.log("查询到参与的项目", res.data);
-        console.assert(res.data.length === 1 ? "正常" : "不正常");
-        if (res.data[0].length === 0) {
+        
+        if (res.data.length === 0) {
           //没有多余的了
+          wx.hideNavigationBarLoading();
           return;
         }
         var collectedProjectIds = res.data[0].collectedProjects;
@@ -65,7 +76,15 @@ Page({
         });
         collectedProjectIds.forEach(id => {
           const db = wx.cloud.database();
-          db.collection("Projects").doc(id).get({
+          db.collection("Projects").doc(id).field({
+            createTimeStamp: true,
+            teamMemberNumber: true,
+            projectName: true,
+            projectDescription: true,
+            workersOpenid: true,
+            projectProgress: true,
+            projectType: true,
+          }).get({
             complete: res => {
               if(!res){
                 //防止project已经被删除了
@@ -76,6 +95,7 @@ Page({
               that.setData({
                 collectedProjectInfos: that.data.collectedProjectInfos.concat(res.data)
               })
+              wx.hideNavigationBarLoading();
             }
           })
         })
